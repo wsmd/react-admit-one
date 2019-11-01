@@ -5,6 +5,7 @@
   "author": "Waseem Dahman <dwaseem@icloud.com>",
   "license": "MIT",
   "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "homepage": "https://github.com/wsmd/react-admit-one",
   "bugs": {
@@ -32,7 +33,7 @@
   ],
   "size-limit": [
     {
-      "path": "dist/*.js",
+      "path": "dist/index.js",
       "limit": "600 B"
     }
   ],

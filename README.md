@@ -27,6 +27,7 @@
 - [Getting Started](#getting-started)
 - [Examples](#examples)
   - [Basic Usage](#basic-usage)
+  - [Debugging](#debugging)
   - [Preventing Future Mounts after the First Instance Unmounts](#preventing-future-mounts-after-the-first-instance-unmounts)
   - [Lifecycle Callbacks](#lifecycle-callbacks)
   - [Specifying Explicit Boundaries](#specifying-explicit-boundaries)
@@ -48,7 +49,7 @@ Managing those components is especially challenging if you happen to work on a v
 
 `react-admit-one` attempts to solve this specific problem, or preventing it from happening, by guarding those components and restricting their use (mount) to one instance only.
 
-It's kind of an admit-one ticket that costs only 500 bytes for your components! Not only that, but it's also built with great developer experience in mind.
+It's kind of an admit-one ticket that costs [less than 500 bytes](https://github.com/ai/size-limit) for your components! Not only that, but it's also built with [great developer experience](#debugging) in mind.
 
 ## Getting Started
 
@@ -108,7 +109,9 @@ When this happens, it will result in the following:
 1. The subsequent element created will not render anything by simply returning `null`.
 2. In the `development` environment, an error will be printed to the console.
 
-The error message will be printed to the console (not thrown) with helpful debugging information. This includes the Javascript stacktrace for both the first mounted instance, as well as the second element attempted to mount.
+### Debugging
+
+When a restricted mount is attempted, an error message will be printed to the console (not thrown) with helpful debugging information. This includes the Javascript stacktrace for both the first mounted instance, as well as the second element attempted to mount.
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/2100222/67921674-cd47da00-fb7e-11e9-9e6c-1d0342d4869d.png" width="620" />
@@ -232,7 +235,7 @@ export default admitOne(WeReallyShouldBeUsingThisOnce, {
 #### Arguments <!-- omit in toc -->
 
 - `component`: A React component to be mounted once
-- `options?`: (_Optional_) An object with the following interface:
+- `options`: (_Optional_) An object with the following interface:
 
 ```ts
 interface AdmitOneOptions {
