@@ -34,7 +34,7 @@
   "size-limit": [
     {
       "path": "dist/index.js",
-      "limit": "600 B"
+      "limit": "500 B"
     }
   ],
   "peerDependencies": {
