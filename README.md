@@ -41,15 +41,15 @@
 
 ## Motivation
 
-Do you have a React component that is intended to be mounted and used only once in your application? Perhaps this component performs some sort of side-effect or has some global state, so it's expected to be mounted once.
+There are certain components that are intended to be mounted and used once. Perhaps these components perform some sort of side-effect or have some global state, so it's assumed that these component will only ever be mounted once.
 
-Working with global state and side-effects, however, can be tricky and needs to be handled with caution. Have you considered what will happen if those components were accidentally mounted twice in your application? Chances are bad things will happen.
+Working with global state and side-effects, however, can be tricky and needs to be handled with caution. Have you considered what will happen if those components were accidentally mounted twice at the same time? Chances are bad things will happen.
 
-Managing those components is especially challenging if you happen to work on a very large project with a growing team. Documentation can help avoid situations like this. Additionally, those components could also implement some logic from within to prevent them from being used twice, but that sounds like a lot of work.
+Managing those components is especially challenging if you happen to work on a very large project with a growing team. Documentation can help avoid situations like this. Additionally, those components could also implement some logic from within to prevent them from being used twice.
 
 `react-admit-one` attempts to solve this specific problem, or preventing it from happening, by guarding those components and restricting their use (mount) to one instance only.
 
-It's kind of an admit-one ticket that costs [less than 500 bytes](https://github.com/ai/size-limit) for your components! Not only that, but it's also built with [great developer experience](#debugging) in mind.
+It's kind of an admit-one ticket that costs [only 400 bytes](https://github.com/ai/size-limit) for your components! Not only that, but it's also built with [great developer experience](#debugging) in mind.
 
 ## Getting Started
 
@@ -90,18 +90,18 @@ export default admitOne(SideEffectComponent);
 That is pretty much everything! When `<SideEffectComponent>` is mounted, it will work as expected.
 
 ```jsx
-<>
+<div>
   <SideEffectComponent />
-<>
+</div>
 ```
 
 However, subsequent attempts to mount or use this component _anywhere in the child component tree_ while the first the instance is already mounted will no longer be permitted. For example:
 
 ```jsx
-<>
+<div>
   <SideEffectComponent /> {/* ← WORKS */}
   <SideEffectComponent /> {/* ← DOES NOT WORK */}
-<>
+</div>
 ```
 
 When this happens, it will result in the following:
@@ -114,7 +114,7 @@ When this happens, it will result in the following:
 When a restricted mount is attempted, an error message will be printed to the console (not thrown) with helpful debugging information. This includes the Javascript stacktrace for both the first mounted instance, as well as the second element attempted to mount.
 
 <div align="center">
-<img src="https://user-images.githubusercontent.com/2100222/67921674-cd47da00-fb7e-11e9-9e6c-1d0342d4869d.png" width="620" />
+  <img src="https://user-images.githubusercontent.com/2100222/68079905-dd062f00-fdc7-11e9-8fb2-bcb2fdec8644.png" width="678" />
 </div>
 
 Please note that this functionality is only intended for development and will be stripped out in production.
