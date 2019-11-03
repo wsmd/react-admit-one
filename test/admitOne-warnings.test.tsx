@@ -33,13 +33,13 @@ describe('AdmitOne Errors', () => {
       );
 
       expect((console as any).error.mock.calls[0][0]).toMatchInlineSnapshot(`
-        "An attempt to render <TestComponent> was made:
+        "Warning: the component <TestComponent> is expected to be mounted once, but a second attempt to mount this component was made:
 
             in AdmitOne(TestComponent) (at admitOne-warnings.test.tsx:30)
             in div (at admitOne-warnings.test.tsx:29)
             in main (at admitOne-warnings.test.tsx:28)
 
-        The component <TestComponent> is already rendered:
+        As a result, the component mounted above will not be rendered. Note that the first instance of <TestComponent> is already mounted:
 
             in AdmitOne(TestComponent) (at admitOne-warnings.test.tsx:21)
             in div (at admitOne-warnings.test.tsx:20)"
@@ -62,13 +62,13 @@ describe('AdmitOne Errors', () => {
       render(React.createElement(NonJSXTree));
 
       expect((console as any).error.mock.calls[0][0]).toMatchInlineSnapshot(`
-        "An attempt to render <TestComponent> was made:
+        "Warning: the component <TestComponent> is expected to be mounted once, but a second attempt to mount this component was made:
 
             in AdmitOne(TestComponent) (created by NonJSXTree)
             in div (created by NonJSXTree)
             in NonJSXTree
 
-        The component <TestComponent> is already rendered:
+        As a result, the component mounted above will not be rendered. Note that the first instance of <TestComponent> is already mounted:
 
             in AdmitOne(TestComponent) (created by NonJSXTree)
             in div (created by NonJSXTree)
@@ -102,13 +102,13 @@ describe('AdmitOne Errors', () => {
       expect(console.error).toHaveBeenCalled();
 
       expect((console as any).error.mock.calls[0][0]).toMatchInlineSnapshot(`
-        "An attempt to render <TestComponent> was made:
+        "Warning: the component <TestComponent> is expected to be mounted once, but a second attempt to mount this component was made:
 
             in AdmitOne(TestComponent) (at admitOne-warnings.test.tsx:97)
             in div (at admitOne-warnings.test.tsx:96)
             in main (at admitOne-warnings.test.tsx:95)
 
-        The component <TestComponent> was rendered:
+        As a result, the component mounted above will not be rendered. Note that the first instance of <TestComponent> was mounted:
 
             in AdmitOne(TestComponent) (at admitOne-warnings.test.tsx:86)
             in div (at admitOne-warnings.test.tsx:85)"
@@ -129,13 +129,13 @@ describe('AdmitOne Errors', () => {
 
       expect(console.error).toHaveBeenCalled();
       expect((console as any).error.mock.calls[0][0]).toMatchInlineSnapshot(`
-        "An attempt to render <TestComponent> was made:
+        "Warning: the component <TestComponent> is expected to be mounted once, but a second attempt to mount this component was made:
 
             in AdmitOne(TestComponent) (at admitOne-warnings.test.tsx:125)
             in AdmitOneBoundary (at admitOne-warnings.test.tsx:123)
             in div (at admitOne-warnings.test.tsx:122)
 
-        The component <TestComponent> is already rendered within a boundary:
+        As a result, the component mounted above will not be rendered. Note that the first instance of <TestComponent> is already mounted within a boundary:
 
             in AdmitOne(TestComponent) (at admitOne-warnings.test.tsx:124)
             in AdmitOneBoundary (at admitOne-warnings.test.tsx:123)

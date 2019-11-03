@@ -92,7 +92,7 @@ That is pretty much everything! When `<SideEffectComponent>` is mounted, it will
 ```jsx
 <>
   <SideEffectComponent />
-<>
+</>
 ```
 
 However, subsequent attempts to mount or use this component _anywhere in the child component tree_ while the first the instance is already mounted will no longer be permitted. For example:
@@ -101,7 +101,7 @@ However, subsequent attempts to mount or use this component _anywhere in the chi
 <>
   <SideEffectComponent /> {/* ← WORKS */}
   <SideEffectComponent /> {/* ← DOES NOT WORK */}
-<>
+</>
 ```
 
 When this happens, it will result in the following:
@@ -114,7 +114,7 @@ When this happens, it will result in the following:
 When a restricted mount is attempted, an error message will be printed to the console (not thrown) with helpful debugging information. This includes the Javascript stacktrace for both the first mounted instance, as well as the second element attempted to mount.
 
 <div align="center">
-<img src="https://user-images.githubusercontent.com/2100222/67921674-cd47da00-fb7e-11e9-9e6c-1d0342d4869d.png" width="620" />
+  <img src="https://user-images.githubusercontent.com/2100222/68079905-dd062f00-fdc7-11e9-8fb2-bcb2fdec8644.png" width="678" />
 </div>
 
 Please note that this functionality is only intended for development and will be stripped out in production.
