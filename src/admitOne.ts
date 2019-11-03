@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useRef, createElement } from 'react';
+import { useContext, useEffect, useRef, createElement } from 'react';
 
-import { captureComponentStack } from './utils/captureComponentStack';
+import captureComponentStack from './utils/captureComponentStack';
 import getDisplayName from './utils/getDisplayName';
 import getErrorMessage from './utils/getErrorMessage';
 import useLazyValue from './utils/useLazyValue';

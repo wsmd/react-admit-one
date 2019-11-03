@@ -1,5 +1,5 @@
 import getDisplayName from './getDisplayName';
-import { captureComponentStack } from './captureComponentStack';
+import captureComponentStack from './captureComponentStack';
 import { InstanceMount } from '../types';
 
 export default function getErrorMessage(

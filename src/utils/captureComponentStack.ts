@@ -16,83 +16,49 @@ interface FiberNode {
   _debugSource: Source | null;
 }
 
-class StackTrace<T> {
-  constructor(private element: ElementWithOwner) {}
-
-  static walkUp(
-    element: ElementWithOwner,
-    callback: (node: FiberNode) => void,
-  ): void {
-    let node: FiberNode | null = element._owner;
-    while (node) {
-      callback(node);
-      node = node.return;
-    }
-  }
-
-  capture(): string {
-    let trace = '';
-    StackTrace.walkUp(this.element, node => {
-      // skipping components that are neither function/class nor html elements.
-      // This will likely be the case with Work instances
-      if (typeof node.type !== 'object') {
-        trace += new StackFrame(node);
-      }
-    });
-    return trace;
+function getComponentName(node: FiberNode): string {
+  switch (typeof node.type) {
+    // The node is a function it will likely have a name
+    case 'function':
+      return getDisplayName(node.type);
+    // The node is likely a tag
+    case 'string':
+      return node.type;
+    /* istanbul ignore next */
+    default:
+      return 'Unknown';
   }
 }
 
-class StackFrame {
-  constructor(private node: FiberNode) {}
-
-  private getNodeName(node: FiberNode): string | null {
-    switch (typeof node.type) {
-      case 'function':
-        // The node is a function it will likely have a name
-        return getDisplayName(node.type);
-      case 'string':
-        // The node is likely a tag
-        return node.type;
-      /* istanbul ignore next */
-      default:
-        return null;
-    }
+function describeStackFrame(node: FiberNode): string {
+  // skipping components that are neither function/class nor html elements.
+  // This will likely be the case with Work instances
+  if (typeof node.type === 'object') {
+    return '';
   }
 
-  private describeSource(): string | null {
-    const source = this.node._debugSource;
-    if (!source) {
-      return null;
-    }
+  const name = getComponentName(node);
+  const { _debugOwner: owner, _debugSource: source } = node;
+
+  let info = '';
+  if (source) {
     const path = source.fileName;
     const fileName = path.replace(/^(.*)[\\/]/, '');
-    return `${fileName}:${source.lineNumber}`;
+    info = ` (at ${fileName}:${source.lineNumber})`;
+  } else if (owner) {
+    const ownerName = getComponentName(owner);
+    info = ` (created by ${ownerName})`;
   }
 
-  private describeOwner(): string | null {
-    const owner = this.node._debugOwner;
-    if (!owner) {
-      return null;
-    }
-    return this.getNodeName(owner);
-  }
-
-  toString(): string {
-    const name = this.getNodeName(this.node);
-    const source = this.describeSource();
-    const ownerName = this.describeOwner();
-
-    let hint = '';
-    if (source) {
-      hint = ` (at ${source})`;
-    } else if (ownerName) {
-      hint = ` (created by ${ownerName})`;
-    }
-    return `\n    in ${name}` + hint;
-  }
+  return `\n    in ${name}` + info;
 }
 
-export function captureComponentStack(element: JSX.Element): string {
-  return new StackTrace(element as ElementWithOwner).capture();
+export default function captureComponentStack(element: JSX.Element): string {
+  let frames = '';
+  let node: FiberNode | null = (element as ElementWithOwner)._owner;
+  while (node) {
+    frames += describeStackFrame(node);
+    node = node.return;
+  }
+  return frames;
 }
