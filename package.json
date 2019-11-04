@@ -34,7 +34,7 @@
   "size-limit": [
     {
       "path": "dist/index.js",
-      "limit": "500 B"
+      "limit": "400 B"
     }
   ],
   "peerDependencies": {
@@ -65,5 +65,17 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "typescript": "^3.6.4"
-  }
+  },
+  "keywords": [
+    "errors",
+    "higher-order-component",
+    "hoc",
+    "once",
+    "performance",
+    "react",
+    "reactjs",
+    "render-optimization",
+    "singleton",
+    "warnings"
+  ]
 }
