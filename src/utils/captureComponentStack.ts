@@ -1,43 +1,18 @@
-import getDisplayName from './getDisplayName';
-
-interface Source {
-  fileName: string;
-  lineNumber: number;
-}
-
-interface ElementWithOwner extends JSX.Element {
-  _owner: FiberNode;
-}
-
-interface FiberNode {
-  type: React.ComponentType | string;
-  return: FiberNode | null;
-  _debugOwner: FiberNode | null;
-  _debugSource: Source | null;
-}
-
-function getComponentName(node: FiberNode): string {
-  switch (typeof node.type) {
-    // The node is a function it will likely have a name
-    case 'function':
-      return getDisplayName(node.type);
-    // The node is likely a tag
-    case 'string':
-      return node.type;
-    /* istanbul ignore next */
-    default:
-      return 'Unknown';
-  }
-}
+import getComponentName from './getDisplayName';
+import { FiberNode, isForwardRefType, ElementWithOwner } from './react-types';
 
 function describeStackFrame(node: FiberNode): string {
-  // skipping components that are neither function/class nor html elements.
+  // skipping components that are neither function/class components, nor html
+  // elements, nor ref-forwarding components (admitOne uses forwardRef).
   // This will likely be the case with Work instances
-  if (typeof node.type === 'object') {
+  if (
+    !node.type ||
+    (typeof node.type === 'object' && !isForwardRefType(node.type))
+  ) {
     return '';
   }
 
-  const name = getComponentName(node);
+  const name = getComponentName(node.type);
   const { _debugOwner: owner, _debugSource: source } = node;
 
   let info = '';
@@ -46,7 +21,7 @@ function describeStackFrame(node: FiberNode): string {
     const fileName = path.replace(/^(.*)[\\/]/, '');
     info = ` (at ${fileName}:${source.lineNumber})`;
   } else if (owner) {
-    const ownerName = getComponentName(owner);
+    const ownerName = getComponentName(owner.type);
     info = ` (created by ${ownerName})`;
   }
 

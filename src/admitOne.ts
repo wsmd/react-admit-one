@@ -1,8 +1,8 @@
-import { useContext, useEffect, useRef, createElement } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 
 import captureComponentStack from './utils/captureComponentStack';
-import getDisplayName from './utils/getDisplayName';
 import getErrorMessage from './utils/getErrorMessage';
+import getDisplayName from './utils/getDisplayName';
 import useLazyValue from './utils/useLazyValue';
 
 import { AdmitOneBoundaryContext } from './AdmitOneBoundary';
@@ -20,16 +20,15 @@ const defaultOptions: Required<AdmitOneOptions> = {
   ignoreBoundary: false,
 };
 
-function admitOne<P, C>(
+function admitOne<P, R, C>(
   WrappedComponent: React.JSXElementConstructor<P>,
   options?: AdmitOneOptions,
 ) {
   const opts = Object.assign({}, defaultOptions, options);
 
-  const wrappedDisplayName = getDisplayName(WrappedComponent);
-
   function WithAdmitOne(
     props: JSX.LibraryManagedAttributes<C, P>,
+    ref: React.Ref<R>,
   ): JSX.Element | null {
     const boundary = useContext(AdmitOneBoundaryContext);
 
@@ -46,7 +45,10 @@ function admitOne<P, C>(
      * as a dependency
      */
     const elementRef = useRef() as React.MutableRefObject<JSX.Element>;
-    elementRef.current = createElement(WrappedComponent, props as P);
+    elementRef.current = React.createElement(
+      WrappedComponent,
+      Object.assign({}, props as P, { ref }),
+    );
 
     const renderAllowed = useLazyValue(() => {
       const element = elementRef.current;
@@ -111,9 +113,12 @@ function admitOne<P, C>(
     return renderAllowed ? elementRef.current : null;
   }
 
-  WithAdmitOne.displayName = `AdmitOne(${wrappedDisplayName})`;
+  if (process.env.NODE_ENV === 'development') {
+    const wrappedDisplayName = getDisplayName(WrappedComponent);
+    WithAdmitOne.displayName = `AdmitOne(${wrappedDisplayName})`;
+  }
 
-  return WithAdmitOne;
+  return React.forwardRef(WithAdmitOne);
 }
 
 export { admitOne };
